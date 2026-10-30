@@ -127,5 +127,5 @@ Add the following to ~/.railsrc
 # =====================
 # Template
 # =====================
---template=https://github.com/lehisanchez/Development/raw/refs/heads/main/Ruby%20on%20Rails/Application%20Templates/Baseline.rb
+--template=https://github.com/lehisanchez/Development/raw/refs/heads/main/Rails/Templates/Baseline.rb
 ```
