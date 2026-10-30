@@ -1,11 +1,13 @@
-
+---
+Pulled from https://github.com/basecamp/fizzy/raw/refs/heads/main/STYLE.md
+---
 # Style
 
-We aim to write code that is a pleasure to read, and we have a lot of opinions about how to do it well. Writing great code is an essential part of our programming culture, and we deliberately set a high bar for every code change anyone contributes. We care about how code reads, how code looks, and how code makes you feel when you read it.
+Aim to write code that is a pleasure to read, and care about doing it well. Writing great code is an essential part of programming culture, and deliberately set a high bar for every code change. Prioritize how code reads, how code looks, and how code makes a human feel when they read it.
 
-We love discussing code. If you have questions about how to write something, or if you detect some smell you are not quite sure how to solve, please ask away to other programmers. A Pull Request is a great way to do this.
+Champion discussing code. If you have questions about how to write something, or if you detect some smell you are not quite sure how to solve, please ask. A Pull Request is a great way to do this.
 
-When writing new code, unless you are very familiar with our approach, try to find similar code elsewhere to look for inspiration.
+When writing new code, unless you are very familiar with the project's approach, try to find similar code elsewhere to look for inspiration.
 
 ## Conditional returns
 
