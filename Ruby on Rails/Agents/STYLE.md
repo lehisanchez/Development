@@ -1,6 +1,5 @@
----
-Pulled from https://github.com/basecamp/fizzy/raw/refs/heads/main/STYLE.md
----
+_Shamelessly copied from https://github.com/basecamp/fizzy/raw/refs/heads/main/STYLE.md_
+
 # Style
 
 Aim to write code that is a pleasure to read, and care about doing it well. Writing great code is an essential part of programming culture, and deliberately set a high bar for every code change. Prioritize how code reads, how code looks, and how code makes a human feel when they read it.
