@@ -123,3 +123,9 @@ Add the following to ~/.railsrc
 # --skip-thruster
 # --skip-test
 # --skip-system-test
+
+# =====================
+# Template
+# =====================
+--template=https://raw.githubusercontent.com/lehisanchez/Development/refs/heads/main/Ruby%20on%20Rails/Application%20Templates/Baseline.rb
+```
