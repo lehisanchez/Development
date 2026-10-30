@@ -61,7 +61,7 @@ if File.exist?(File.join(destination_root, devcontainer_settings))
   # Give the vscode user ownership of the Claude config dir before setup
   gsub_file devcontainer_settings,
     %("postCreateCommand": "bin/setup --skip-server"),
-    %("postCreateCommand": "sudo chown -R vscode:vscode /home/vscode/.claude && bin/setup --skip-server")
+    %("postCreateCommand": "sudo chown -R vscode:vscode /home/vscode/.claude && bin/setup --skip-server && claude install")
 
   # Persist the Claude config dir in a named volume
   claude_mount = %("source=claude-code-config,target=/home/vscode/.claude,type=volume")
