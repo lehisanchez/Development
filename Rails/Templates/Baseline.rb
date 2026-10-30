@@ -17,7 +17,7 @@ create_file ".claude/CLAUDE.md" do
   "@../AGENTS.md"
 end
 
-create_file ".claude/settings.json" do <<~JSON
+create_file ".claude/settings.json" do <<-CODE.strip_heredoc
   {
     "extraKnownMarketplaces": {
       "caveman": {
@@ -46,7 +46,7 @@ create_file ".claude/settings.json" do <<~JSON
       "spec-driven-development@maquina": true
     }
   }
-  JSON
+  CODE
 end
 
 
