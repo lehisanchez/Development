@@ -62,21 +62,37 @@ if File.exist?(File.join(destination_root, devcontainer_settings))
   gsub_file devcontainer_settings,
     %("postCreateCommand": "bin/setup --skip-server"),
     %("postCreateCommand": "sudo chown -R vscode:vscode /home/vscode/.claude && bin/setup --skip-server && claude install")
+end
 
-  # Persist the Claude config dir in a named volume
-  claude_mount = %("source=claude-code-config,target=/home/vscode/.claude,type=volume")
 
-  unless existing.include?(claude_mount)
-    if existing.include?(%("mounts": [))
-      # Rails only generates mounts with --dev; add ours to the front of that list
-      inject_into_file devcontainer_settings, "\n    #{claude_mount},", after: %("mounts": [)
+# ---------------------------------------------------------
+# Devcontainer Compose
+# Persist the Claude config dir in a named volume
+# (only when the app was generated with --devcontainer)
+# ---------------------------------------------------------
+devcontainer_compose = ".devcontainer/compose.yaml"
+claude_volume = "claude-code-config"
+
+if File.exist?(File.join(destination_root, devcontainer_compose))
+  existing = File.read(File.join(destination_root, devcontainer_compose))
+
+  unless existing.include?("#{claude_volume}:/home/vscode/.claude")
+    # Mount after the workspace volume in the rails-app service
+    inject_into_file devcontainer_compose, "    - #{claude_volume}:/home/vscode/.claude\n",
+      after: %r{^    volumes:\n    - \.\./\.\..*:cached\n}
+  end
+
+  unless existing.match?(/^  #{claude_volume}:$/)
+    if existing.match?(/^volumes:$/)
+      # Rails adds a top-level volumes block for database services; add ours to it
+      inject_into_file devcontainer_compose, "\n  #{claude_volume}:\n    name: #{claude_volume}", after: /^volumes:$/
     else
-      inject_into_file devcontainer_settings, <<~JSON.indent(2), before: "  // Use 'postCreateCommand'"
-        "mounts": [
-          #{claude_mount}
-        ],
+      append_to_file devcontainer_compose, <<~YAML
 
-      JSON
+        volumes:
+          #{claude_volume}:
+            name: #{claude_volume}
+      YAML
     end
   end
 end
