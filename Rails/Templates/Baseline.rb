@@ -17,6 +17,38 @@ create_file ".claude/CLAUDE.md" do
   "@../AGENTS.md"
 end
 
+create_file ".claude/settings.json" do <<~JSON
+  {
+    "extraKnownMarketplaces": {
+      "caveman": {
+        "source": {
+          "source": "github",
+          "repo": "JuliusBrussee/caveman"
+        }
+      },
+      "maquina": {
+        "source": {
+          "source": "github",
+          "repo": "maquina-app/rails-claude-code"
+        }
+      }
+    },
+    "enabledPlugins": {
+      "caveman@caveman": true,
+      "better-stimulus@maquina": true,
+      "hotwire-patterns@maquina": true,
+      "maquina-ui-standards@maquina": true,
+      "mvp-creator@maquina": true,
+      "rails-hotwire-driver@maquina": true,
+      "rails-security-auditor@maquina": true,
+      "rails-simplifier@maquina": true,
+      "rails-upgrade-assistant@maquina": true,
+      "spec-driven-development@maquina": true
+    }
+  }
+  JSON
+end
+
 
 # ---------------------------------------------------------
 # Devcontainer
