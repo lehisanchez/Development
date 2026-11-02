@@ -95,3 +95,60 @@ if File.exist?(File.join(destination_root, devcontainer_compose))
     end
   end
 end
+
+# ---------------------------------------------------------
+# GEMFILE
+# ---------------------------------------------------------
+remove_file "Gemfile"
+get "https://github.com/lehisanchez/Development/raw/refs/heads/main/Rails/Templates/Gemfile", "Gemfile"
+
+# ---------------------------------------------------------
+# SimpleCov
+# ---------------------------------------------------------
+prepend_to_file "test/test_helper.rb" do
+  "require \"simplecov\"\nSimpleCov.start \"rails\"\n\n"
+end
+
+# ---------------------------------------------------------
+# GIT
+# ---------------------------------------------------------
+append_file '.gitignore', "# Ignore hidden system files\n.DS_Store\nThumbs.db\n"
+append_file '.gitignore', "# Ignore SimpleCov files\ncoverage\n"
+
+# ---------------------------------------------------------
+# ENVIRONMENT
+# ---------------------------------------------------------
+environment <<-CODE.strip_heredoc
+  # Enable UUIDs for primary keys
+  config.generators do |g|
+    g.orm :active_record, primary_key_type: :uuid
+  end
+
+  CODE
+
+# ---------------------------------------------------------
+# config/initializers/enable_yjit.rb
+# ---------------------------------------------------------
+initializer 'enable_yjit.rb', <<-CODE.strip_heredoc
+  if defined? RubyVM::YJIT.enable
+    Rails.application.config.after_initialize do
+      RubyVM::YJIT.enable
+    end
+  end
+  CODE
+
+# ---------------------------------------------------------
+# AFTER BUNDLE
+# ---------------------------------------------------------
+after_bundle do
+  rails_command("generate rails_live_reload:install")
+  rails_command("generate sqlite_crypto:install")
+  rails_command("generate maquina_components:install")
+  # rails_command("generate authentication")
+  # install_static_pages
+  run("bundle exec bin/setup --skip-server --reset")
+  run("bundle exec bin/ci")
+  git add: "."
+  git commit: "-a -m 'Initial commit'"
+  run("code .")
+end
