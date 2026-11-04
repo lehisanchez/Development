@@ -138,15 +138,41 @@ initializer 'enable_yjit.rb', <<-CODE.strip_heredoc
   CODE
 
 # ---------------------------------------------------------
+# STATIC PAGES
+# ---------------------------------------------------------
+def install_static_pages
+  rails_command("generate controller Pages welcome dashboard --skip-routes")
+
+  inject_into_file "app/controllers/pages_controller.rb", after: "class PagesController < ApplicationController" do
+    "\n  allow_unauthenticated_access only: %i[ welcome ]"
+  end
+
+  remove_file('app/views/pages/welcome.html.erb')
+
+  file 'app/views/pages/welcome.html.erb' do
+    <<-CODE.strip_heredoc
+    <%= render "components/header" do %>
+      <%= render "components/sidebar/trigger" %>
+      <%= render "components/separator", orientation: :vertical %>
+      <h1 class="text-sm font-medium">#{app_name.capitalize}</h1>
+    <% end %>
+    CODE
+  end
+
+  route 'get "dashboard", to: "pages#dashboard"'
+  route 'root to: "pages#welcome"'
+end
+
+# ---------------------------------------------------------
 # AFTER BUNDLE
 # ---------------------------------------------------------
 after_bundle do
   rails_command("generate rails_live_reload:install")
   rails_command("generate sqlite_crypto:install")
   rails_command("generate maquina_components:install")
-  # rails_command("generate authentication")
-  # install_static_pages
-  run("bundle exec bin/setup --skip-server --reset")
+  rails_command("generate authentication")
+  install_static_pages
+  run("bundle exec bin/setup --skip-server")
   run("bundle exec bin/ci")
   git add: "."
   git commit: "-a -m 'Initial commit'"
